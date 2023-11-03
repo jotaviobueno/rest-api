@@ -1,0 +1,22 @@
+import { Global, Module } from '@nestjs/common';
+import { AccessService } from './access.service';
+import { AccessController } from './access.controller';
+import { PersonModule } from '../person/person.module';
+import { JwtModule } from '@nestjs/jwt';
+import { environment } from 'src/config';
+import { AuthGuard } from './guard';
+
+@Global()
+@Module({
+  imports: [
+    PersonModule,
+    JwtModule.register({
+      global: true,
+      secret: environment.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
+  controllers: [AccessController],
+  providers: [AccessService, AuthGuard],
+})
+export class AccessModule {}
