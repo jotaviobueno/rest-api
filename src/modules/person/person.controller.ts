@@ -16,12 +16,12 @@ export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Post()
+  @IsPublic()
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personService.create(createPersonDto);
   }
 
   @Get()
-  @IsPublic()
   findAll() {
     return this.personService.findAll();
   }
