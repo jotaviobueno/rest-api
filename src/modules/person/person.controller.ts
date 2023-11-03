@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto, IdInput, UpdatePersonDto } from 'src/domain/dtos';
+import { IsPublic } from '../access/decorators';
 
 @Controller('person')
 export class PersonController {
@@ -20,6 +21,7 @@ export class PersonController {
   }
 
   @Get()
+  @IsPublic()
   findAll() {
     return this.personService.findAll();
   }

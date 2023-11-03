@@ -9,15 +9,25 @@ import {
 import { environment } from '../../../config/environment';
 import { PersonService } from 'src/modules/person/person.service';
 import { JwtService } from '@nestjs/jwt';
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AccessGuard implements CanActivate {
   constructor(
     private readonly personService: PersonService,
+    private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
   ) {}
 
   async canActivate(context: ExecutionContext) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) return true;
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request.headers);
 
