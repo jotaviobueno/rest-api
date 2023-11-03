@@ -3,7 +3,7 @@ import { IFindMany } from 'src/domain/@interfaces';
 import { CreatePersonDto, UpdatePersonDto } from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
 import { PersonRepository } from 'src/repositories/person';
-import { hash } from 'src/domain/utils';
+import { hash, isMongoId } from 'src/domain/utils';
 
 @Injectable()
 export class PersonService {
@@ -55,6 +55,12 @@ export class PersonService {
     id: string,
     returnPassword: boolean = false,
   ): Promise<Omit<PersonEntity, 'password'> | PersonEntity> {
+    if (!isMongoId(id))
+      throw new HttpException(
+        'Id sent its not mongo id',
+        HttpStatus.BAD_REQUEST,
+      );
+
     const { password, ...person } = await this.personRepository.findById(id);
 
     if (!person)
