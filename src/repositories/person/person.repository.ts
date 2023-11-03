@@ -29,9 +29,20 @@ export class PersonRepository {
     return this.prismaService.person.count();
   }
 
-  findAll(): Promise<PersonEntity[]> {
+  findAll(): Promise<Omit<PersonEntity, 'password'>[]> {
     return this.prismaService.person.findMany({
       where: {},
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        email: true,
+        avatarUrl: true,
+        createdAt: true,
+        updatedAt: true,
+        deletedAt: true,
+      },
     });
   }
 
