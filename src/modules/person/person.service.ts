@@ -81,10 +81,12 @@ export class PersonService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const { password, ...person } = await this.personRepository.findById(id);
+    const personInfo = await this.personRepository.findById(id);
 
-    if (!person)
+    if (!personInfo)
       throw new HttpException('Person not found', HttpStatus.NOT_FOUND);
+
+    const { password, ...person } = personInfo;
 
     return returnPassword ? person : { ...person, password };
   }

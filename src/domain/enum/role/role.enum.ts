@@ -3,4 +3,5 @@ export enum ROLE_ENUM {
   DEV = 'DEV',
   FINANCE = 'FINANCE',
   USER = 'USER',
+  CUSTOMER = 'CUSTOMER',
 }

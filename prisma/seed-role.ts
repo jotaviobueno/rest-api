@@ -28,7 +28,7 @@ async function main(roles: string[]) {
   );
 }
 
-const roles = ['ADMIN', 'DEV', 'FINANCE', 'USER'];
+const roles = ['ADMIN', 'DEV', 'FINANCE', 'CUSTOMER', 'USER'];
 
 main(roles)
   .then(async () => {

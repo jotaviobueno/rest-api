@@ -32,7 +32,7 @@ export class AccessGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request.headers);
 
     if (!token)
-      throw new HttpException('invalid session', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
 
     try {
       const payload: { sub: string } = await this.jwtService.verifyAsync(
@@ -42,7 +42,7 @@ export class AccessGuard implements CanActivate {
         },
       );
 
-      request['person'] = await this.personService.findOne(payload.sub);
+      request['person'] = await this.personService.findOne(payload.sub, true);
     } catch (e) {
       Logger.debug('FAILED TO AUTH', e.message);
 
