@@ -24,8 +24,9 @@ export class CommerceRepository {
     });
   }
 
-  findAll(): Promise<CommerceEntity[]> {
+  findAll(query: any): Promise<CommerceEntity[]> {
     return this.prismaService.commerce.findMany({
+      ...query,
       where: {
         deletedAt: null,
       },
@@ -54,6 +55,15 @@ export class CommerceRepository {
       where: {
         id,
         deletedAt: null,
+      },
+      include: {
+        person: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+          },
+        },
       },
     });
   }

@@ -6,10 +6,14 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { IFindMany } from 'src/domain/@interfaces';
-import { CreatePersonDto, UpdatePersonDto } from 'src/domain/dtos';
+import {
+  CreatePersonDto,
+  QueryParamsDto,
+  UpdatePersonDto,
+} from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
 import { PersonRepository } from 'src/repositories/person';
-import { hash, isMongoId } from 'src/domain/utils';
+import { QueryBuilder, hash, isMongoId } from 'src/domain/utils';
 import { RoleService } from '../role/role.service';
 import { PersonRoleService } from '../person-role/person-role.service';
 
@@ -64,8 +68,12 @@ export class PersonService {
     return person;
   }
 
-  async findAll(): Promise<IFindMany<Omit<PersonEntity, 'password'>>> {
-    const data = await this.personRepository.findAll();
+  async findAll(
+    queryParams: QueryParamsDto,
+  ): Promise<IFindMany<Omit<PersonEntity, 'password'>>> {
+    const query = new QueryBuilder(queryParams).handle();
+
+    const data = await this.personRepository.findAll(query);
     const total = await this.personRepository.count();
 
     return { total, data };

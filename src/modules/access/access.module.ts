@@ -4,7 +4,7 @@ import { AccessController } from './access.controller';
 import { PersonModule } from '../person/person.module';
 import { JwtModule } from '@nestjs/jwt';
 import { environment } from 'src/config';
-import { AccessGuard } from './guard';
+import { AccessGuard } from './guards';
 
 @Global()
 @Module({

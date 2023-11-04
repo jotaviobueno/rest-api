@@ -33,8 +33,9 @@ export class PersonRepository {
     });
   }
 
-  findAll(): Promise<Omit<PersonEntity, 'password'>[]> {
+  findAll(query: any): Promise<Omit<PersonEntity, 'password'>[]> {
     return this.prismaService.person.findMany({
+      ...query,
       where: {
         deletedAt: null,
       },

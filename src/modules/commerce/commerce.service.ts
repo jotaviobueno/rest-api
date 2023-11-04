@@ -1,8 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IFindMany } from 'src/domain/@interfaces';
-import { CreateCommerceDto, UpdateCommerceDto } from 'src/domain/dtos';
+import {
+  CreateCommerceDto,
+  QueryParamsDto,
+  UpdateCommerceDto,
+} from 'src/domain/dtos';
 import { CommerceEntity } from 'src/domain/entities';
-import { isMongoId } from 'src/domain/utils';
+import { QueryBuilder, isMongoId } from 'src/domain/utils';
 import { CommerceRepository } from 'src/repositories/commerce';
 
 @Injectable()
@@ -22,8 +26,12 @@ export class CommerceService {
     return commerce;
   }
 
-  async findAll(): Promise<IFindMany<CommerceEntity>> {
-    const data = await this.commerceRepository.findAll();
+  async findAll(
+    queryParams: QueryParamsDto,
+  ): Promise<IFindMany<CommerceEntity>> {
+    const query = new QueryBuilder(queryParams).handle();
+
+    const data = await this.commerceRepository.findAll(query);
     const total = await this.commerceRepository.count();
 
     return { data, total };

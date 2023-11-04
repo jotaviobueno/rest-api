@@ -9,5 +9,6 @@ import { RoleModule } from '../role/role.module';
   imports: [PersonRoleModule, RoleModule],
   controllers: [CommerceController],
   providers: [CommerceService, CommerceRepository],
+  exports: [CommerceService],
 })
 export class CommerceModule {}

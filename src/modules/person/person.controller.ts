@@ -6,9 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
-import { CreatePersonDto, IdInput, UpdatePersonDto } from 'src/domain/dtos';
+import {
+  CreatePersonDto,
+  QueryParamsDto,
+  UpdatePersonDto,
+} from 'src/domain/dtos';
 import { IsPublic } from '../access/decorators';
 
 @Controller('person')
@@ -21,9 +26,10 @@ export class PersonController {
     return this.personService.create(createPersonDto);
   }
 
+  @IsPublic()
   @Get()
-  findAll() {
-    return this.personService.findAll();
+  findAll(@Query() queryParamsDto: QueryParamsDto) {
+    return this.personService.findAll(queryParamsDto);
   }
 
   @Get(':id')
@@ -32,15 +38,12 @@ export class PersonController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') { id }: IdInput,
-    @Body() updatePersonDto: UpdatePersonDto,
-  ) {
+  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
     return this.personService.update({ ...updatePersonDto, id });
   }
 
   @Delete(':id')
-  remove(@Param('id') { id }: IdInput) {
+  remove(@Param('id') id: string) {
     return this.personService.remove(id);
   }
 }
