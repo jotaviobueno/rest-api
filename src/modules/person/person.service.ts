@@ -1,13 +1,26 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { IFindMany } from 'src/domain/@interfaces';
 import { CreatePersonDto, UpdatePersonDto } from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
 import { PersonRepository } from 'src/repositories/person';
 import { hash, isMongoId } from 'src/domain/utils';
+import { RoleService } from '../role/role.service';
+import { PersonRoleService } from '../person-role/person-role.service';
 
 @Injectable()
 export class PersonService {
-  constructor(private readonly personRepository: PersonRepository) {}
+  constructor(
+    private readonly personRepository: PersonRepository,
+    private readonly roleService: RoleService,
+    @Inject(forwardRef(() => PersonRoleService))
+    private readonly personRoleService: PersonRoleService,
+  ) {}
 
   async create(data: CreatePersonDto): Promise<Omit<PersonEntity, 'password'>> {
     const emailAlreadyExist = await this.personRepository.findByEmail(
@@ -30,6 +43,13 @@ export class PersonService {
     const { password, ...person } = await this.personRepository.create({
       ...data,
       password: passwordHash,
+    });
+
+    const role = await this.roleService.findByName('USER');
+
+    await this.personRoleService.create({
+      personId: person.id,
+      roleId: role.id,
     });
 
     return person;

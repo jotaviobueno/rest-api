@@ -5,9 +5,16 @@ import { AccessModule } from './modules/access/access.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessGuard } from './modules/access/guard';
 import { RoleModule } from './modules/role/role.module';
+import { PersonRoleModule } from './modules/person-role/person-role.module';
 
 @Module({
-  imports: [PersonModule, PrismaModule, AccessModule, RoleModule],
+  imports: [
+    PersonModule,
+    PrismaModule,
+    AccessModule,
+    RoleModule,
+    PersonRoleModule,
+  ],
   providers: [
     {
       provide: APP_GUARD,

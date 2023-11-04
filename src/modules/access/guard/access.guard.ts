@@ -44,8 +44,6 @@ export class AccessGuard implements CanActivate {
 
       request['person'] = await this.personService.findOne(payload.sub);
     } catch (e) {
-      console.log(e);
-
       Logger.debug('FAILED TO AUTH', e.message);
 
       throw new HttpException('Failed to auth', HttpStatus.UNAUTHORIZED);

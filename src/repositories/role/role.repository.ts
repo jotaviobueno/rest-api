@@ -19,4 +19,22 @@ export class RoleRepository {
       },
     });
   }
+
+  findByName(name: string): Promise<RoleEntity> {
+    return this.prismaService.role.findFirst({
+      where: {
+        name,
+      },
+    });
+  }
+
+  findManyWithIds(ids: string[]): Promise<RoleEntity[]> {
+    return this.prismaService.role.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
 }
