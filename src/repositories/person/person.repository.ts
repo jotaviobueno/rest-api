@@ -11,8 +11,7 @@ export class PersonRepository {
     return this.prismaService.person.create({
       data: {
         ...data,
-        updatedAt: new Date(),
-        createdAt: new Date(),
+        deletedAt: null,
       },
     });
   }
@@ -21,17 +20,24 @@ export class PersonRepository {
     return this.prismaService.person.findFirst({
       where: {
         id,
+        deletedAt: null,
       },
     });
   }
 
   count(): Promise<number> {
-    return this.prismaService.person.count();
+    return this.prismaService.person.count({
+      where: {
+        deletedAt: null,
+      },
+    });
   }
 
   findAll(): Promise<Omit<PersonEntity, 'password'>[]> {
     return this.prismaService.person.findMany({
-      where: {},
+      where: {
+        deletedAt: null,
+      },
       select: {
         id: true,
         firstName: true,

@@ -22,16 +22,19 @@ model Person {
   updatedAt  DateTime     @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime?    @map("deleted_at") @db.Timestamp
   personRole PersonRole[]
+  Commerce   Commerce[]
 
   @@map("person")
 }
 
 model PersonRole {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  person   Person @relation(fields: [personId], references: [id])
-  personId String @map("person_id") @db.ObjectId
-  role     Role   @relation(fields: [roleId], references: [id])
-  roleId   String @map("role_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  person    Person   @relation(fields: [personId], references: [id])
+  personId  String   @map("person_id") @db.ObjectId
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    String   @map("role_id") @db.ObjectId
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp
 
   @@map("person-role")
 }
@@ -45,4 +48,33 @@ model Role {
   personRole  PersonRole[]
 
   @@map("role")
+}
+
+model Commerce {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String    @unique
+  descriptions String[]  @default([])
+  imagesUrls   String[]  @default([])
+  person       Person    @relation(fields: [personId], references: [id])
+  personId     String    @map("person_id") @db.ObjectId
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamp
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamp
+  Product      Product[]
+
+  @@map("commerce")
+}
+
+model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  imagesUrls  String[]  @default([])
+  commerce    Commerce  @relation(fields: [commerceId], references: [id])
+  commerceId  String    @map("commerce_id") @db.ObjectId
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamp
+
+  @@map("product")
 }

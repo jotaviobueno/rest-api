@@ -13,7 +13,7 @@ import { AccessGuard } from './guard';
     JwtModule.register({
       global: true,
       secret: environment.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '20d' },
     }),
   ],
   controllers: [AccessController],

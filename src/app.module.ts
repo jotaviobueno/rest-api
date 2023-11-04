@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessGuard } from './modules/access/guard';
 import { RoleModule } from './modules/role/role.module';
 import { PersonRoleModule } from './modules/person-role/person-role.module';
+import { CommerceModule } from './modules/commerce/commerce.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PersonRoleModule } from './modules/person-role/person-role.module';
     AccessModule,
     RoleModule,
     PersonRoleModule,
+    CommerceModule,
   ],
   providers: [
     {
