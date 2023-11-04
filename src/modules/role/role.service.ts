@@ -24,4 +24,12 @@ export class RoleService {
 
     return role;
   }
+
+  findByName(name: string): Promise<RoleEntity> {
+    return this.roleRepository.findByName(name);
+  }
+
+  findManyWithIds(ids: string[]): Promise<RoleEntity[]> {
+    return this.roleRepository.findManyWithIds(ids);
+  }
 }

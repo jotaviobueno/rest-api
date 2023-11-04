@@ -22,8 +22,10 @@ export class AccessService {
     if (!passwordIsEqual)
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
 
-    return this.jwtService.sign({
+    const token = this.jwtService.sign({
       sub: person.id,
     });
+
+    return { token };
   }
 }
