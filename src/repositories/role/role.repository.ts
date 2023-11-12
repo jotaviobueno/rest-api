@@ -5,7 +5,7 @@ import { RepositoryFactory } from 'src/domain/factories';
 @Injectable()
 export class RoleRepository extends RepositoryFactory<RoleEntity> {
   constructor() {
-    super('product');
+    super('role');
   }
 
   findByName(name: string): Promise<RoleEntity> {

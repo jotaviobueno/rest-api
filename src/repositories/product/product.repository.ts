@@ -21,9 +21,9 @@ export class ProductRepository extends RepositoryFactory<
       include: {
         commerce: {
           select: {
+            id: true,
             name: true,
             imagesUrls: true,
-            id: true,
           },
         },
       },

@@ -20,7 +20,7 @@ import { Roles } from '../role/decorators';
 import { ROLE_ENUM } from 'src/domain/enum/role';
 
 @Controller('product')
-@Roles(ROLE_ENUM.CUSTOMER)
+@Roles(ROLE_ENUM.USER)
 @UseGuards(RoleGuard)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
