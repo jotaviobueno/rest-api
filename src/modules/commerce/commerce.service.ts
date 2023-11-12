@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IFindMany } from 'src/domain/@interfaces';
+import { ServiceBase } from 'src/domain/base';
 import {
   CreateCommerceDto,
   QueryParamsDto,
@@ -10,7 +11,9 @@ import { QueryBuilder, isMongoId } from 'src/domain/utils';
 import { CommerceRepository } from 'src/repositories/commerce';
 
 @Injectable()
-export class CommerceService {
+export class CommerceService
+  implements Partial<ServiceBase<CreateCommerceDto, CommerceEntity>>
+{
   constructor(private readonly commerceRepository: CommerceRepository) {}
 
   async create(data: CreateCommerceDto): Promise<CommerceEntity> {

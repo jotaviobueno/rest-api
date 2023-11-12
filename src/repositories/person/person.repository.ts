@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/db/prisma.service';
-import { CreatePersonDto, UpdatePersonDto } from 'src/domain/dtos';
+import { CreatePersonDto } from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
+import { RepositoryFactory } from 'src/domain/factories';
 
 @Injectable()
-export class PersonRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+export class PersonRepository extends RepositoryFactory<
+  PersonEntity,
+  CreatePersonDto
+> {
+  constructor() {
+    super('person');
+  }
 
   create(data: CreatePersonDto): Promise<PersonEntity> {
     return this.prismaService.person.create({
@@ -25,15 +30,7 @@ export class PersonRepository {
     });
   }
 
-  count(): Promise<number> {
-    return this.prismaService.person.count({
-      where: {
-        deletedAt: null,
-      },
-    });
-  }
-
-  findAll(query: any): Promise<Omit<PersonEntity, 'password'>[]> {
+  findAll(query: any): Promise<PersonEntity[]> {
     return this.prismaService.person.findMany({
       ...query,
       where: {
@@ -65,30 +62,6 @@ export class PersonRepository {
     return this.prismaService.person.findFirst({
       where: {
         username,
-      },
-    });
-  }
-
-  update({ id, ...data }: UpdatePersonDto): Promise<PersonEntity> {
-    return this.prismaService.person.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-        updatedAt: new Date(),
-      },
-    });
-  }
-
-  softDelete(id: string): Promise<PersonEntity> {
-    return this.prismaService.person.update({
-      where: {
-        id,
-      },
-      data: {
-        updatedAt: new Date(),
-        deletedAt: new Date(),
       },
     });
   }

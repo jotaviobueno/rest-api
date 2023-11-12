@@ -6,4 +6,5 @@ export class RoleEntity implements Role {
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt: Date | null;
 }

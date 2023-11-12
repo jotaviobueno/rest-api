@@ -7,9 +7,12 @@ import { IFindMany } from 'src/domain/@interfaces';
 import { ProductEntity } from 'src/domain/entities';
 import { QueryBuilder, isMongoId } from 'src/domain/utils';
 import { QueryParamsDto } from 'src/domain/dtos';
+import { ServiceBase } from 'src/domain/base';
 
 @Injectable()
-export class ProductService {
+export class ProductService
+  implements Partial<ServiceBase<CreateProductDto, ProductEntity>>
+{
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly commerceService: CommerceService,

@@ -1,8 +1,9 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleGuard } from './guards';
 import { Roles } from './decorators';
 import { ROLE_ENUM } from 'src/domain/enum/role';
+import { QueryParamsDto } from 'src/domain/dtos';
 
 @Controller('role')
 export class RoleController {
@@ -11,8 +12,8 @@ export class RoleController {
   @Get()
   @Roles(ROLE_ENUM.ADMIN, ROLE_ENUM.DEV)
   @UseGuards(RoleGuard)
-  findAll() {
-    return this.roleService.findAll();
+  findAll(@Query() queryParamsDto: QueryParamsDto) {
+    return this.roleService.findAll(queryParamsDto);
   }
 
   @Get(':id')

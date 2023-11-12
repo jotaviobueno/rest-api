@@ -10,9 +10,12 @@ import { PersonRoleEntity } from 'src/domain/entities';
 import { PersonRoleRepository } from 'src/repositories/person-role';
 import { PersonService } from '../person/person.service';
 import { RoleService } from '../role/role.service';
+import { ServiceBase } from 'src/domain/base';
 
 @Injectable()
-export class PersonRoleService {
+export class PersonRoleService
+  implements Partial<ServiceBase<PersonRoleDto, PersonRoleEntity>>
+{
   constructor(
     private readonly personRoleRepository: PersonRoleRepository,
     @Inject(forwardRef(() => PersonService))

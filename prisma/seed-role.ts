@@ -5,21 +5,24 @@ const prisma = new PrismaClient();
 async function main(roles: string[]) {
   return prisma.$transaction(
     async (tx) => {
-      for (const role of roles) {
-        const roleAlreadyExist = await tx.role.findFirst({
-          where: {
-            name: role,
-          },
-        });
+      await Promise.all(
+        roles.map(async (role) => {
+          const roleAlreadyExist = await tx.role.findFirst({
+            where: {
+              name: role,
+            },
+          });
 
-        if (roleAlreadyExist) throw new Error('Role already ' + role);
+          if (roleAlreadyExist) return roleAlreadyExist;
 
-        await tx.role.create({
-          data: {
-            name: role,
-          },
-        });
-      }
+          await tx.role.create({
+            data: {
+              name: role,
+              deletedAt: null,
+            },
+          });
+        }),
+      );
     },
     {
       maxWait: 5000, // default: 2000

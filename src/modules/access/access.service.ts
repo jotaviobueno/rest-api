@@ -3,9 +3,12 @@ import { CreateAccessDto } from '../../domain/dtos/access/create-access.dto';
 import { PersonService } from '../person/person.service';
 import { compare } from 'src/domain/utils';
 import { JwtService } from '@nestjs/jwt';
+import { ServiceBase } from 'src/domain/base';
 
 @Injectable()
-export class AccessService {
+export class AccessService
+  implements Partial<ServiceBase<{ token: string }, CreateAccessDto>>
+{
   constructor(
     private readonly personService: PersonService,
     private readonly jwtService: JwtService,

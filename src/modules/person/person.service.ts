@@ -16,9 +16,13 @@ import { PersonRepository } from 'src/repositories/person';
 import { QueryBuilder, hash, isMongoId } from 'src/domain/utils';
 import { RoleService } from '../role/role.service';
 import { PersonRoleService } from '../person-role/person-role.service';
+import { ServiceBase } from 'src/domain/base';
 
 @Injectable()
-export class PersonService {
+export class PersonService
+  implements
+    Partial<ServiceBase<Omit<PersonEntity, 'password'>, CreatePersonDto>>
+{
   constructor(
     private readonly personRepository: PersonRepository,
     private readonly roleService: RoleService,
@@ -102,13 +106,13 @@ export class PersonService {
   async update(data: UpdatePersonDto): Promise<Omit<PersonEntity, 'password'>> {
     const person = await this.findOne(data.id);
 
+    if (data.password) data.password = await hash(data.password);
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...update } = await this.personRepository.update({
-      ...data,
       id: person.id,
+      ...data,
     });
-
-    if (data.password) data.password = await hash(data.password);
 
     if (!update)
       throw new HttpException('Failed to update', HttpStatus.NOT_ACCEPTABLE);

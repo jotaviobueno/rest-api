@@ -1,19 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/db/prisma.service';
-import { CreateCommerceDto, UpdateCommerceDto } from 'src/domain/dtos';
+import { CreateCommerceDto } from 'src/domain/dtos';
 import { CommerceEntity } from 'src/domain/entities';
+import { RepositoryFactory } from 'src/domain/factories';
 
 @Injectable()
-export class CommerceRepository {
-  constructor(private readonly prismaService: PrismaService) {}
-
-  create(data: CreateCommerceDto): Promise<CommerceEntity> {
-    return this.prismaService.commerce.create({
-      data: {
-        ...data,
-        deletedAt: null,
-      },
-    });
+export class CommerceRepository extends RepositoryFactory<
+  CommerceEntity,
+  CreateCommerceDto
+> {
+  constructor() {
+    super('commerce');
   }
 
   findByName(name: string): Promise<CommerceEntity> {
@@ -42,14 +38,6 @@ export class CommerceRepository {
     });
   }
 
-  count(): Promise<number> {
-    return this.prismaService.commerce.count({
-      where: {
-        deletedAt: null,
-      },
-    });
-  }
-
   findById(id: string): Promise<CommerceEntity> {
     return this.prismaService.commerce.findFirst({
       where: {
@@ -64,30 +52,6 @@ export class CommerceRepository {
             avatarUrl: true,
           },
         },
-      },
-    });
-  }
-
-  update({ id, ...data }: UpdateCommerceDto): Promise<CommerceEntity> {
-    return this.prismaService.commerce.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-        updatedAt: new Date(),
-      },
-    });
-  }
-
-  softDelete(id: string): Promise<CommerceEntity> {
-    return this.prismaService.commerce.update({
-      where: {
-        id,
-      },
-      data: {
-        updatedAt: new Date(),
-        deletedAt: new Date(),
       },
     });
   }
