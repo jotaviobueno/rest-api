@@ -10,6 +10,7 @@ import {
   CreatePersonDto,
   QueryParamsDto,
   UpdatePersonDto,
+  UpdateSellerDto,
 } from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
 import { PersonRepository } from 'src/repositories/person';
@@ -21,7 +22,13 @@ import { ServiceBase } from 'src/domain/base';
 @Injectable()
 export class PersonService
   implements
-    Partial<ServiceBase<Omit<PersonEntity, 'password'>, CreatePersonDto>>
+    Partial<
+      ServiceBase<
+        Omit<PersonEntity, 'password'>,
+        CreatePersonDto,
+        UpdateSellerDto
+      >
+    >
 {
   constructor(
     private readonly personRepository: PersonRepository,

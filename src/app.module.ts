@@ -8,6 +8,9 @@ import { RoleModule } from './modules/role/role.module';
 import { PersonRoleModule } from './modules/person-role/person-role.module';
 import { CommerceModule } from './modules/commerce/commerce.module';
 import { ProductModule } from './modules/product/product.module';
+import { SellerModule } from './modules/seller/seller.module';
+import { CategoryModule } from './modules/category/category.module';
+import { ThemeModule } from './modules/theme/theme.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { ProductModule } from './modules/product/product.module';
     PersonRoleModule,
     CommerceModule,
     ProductModule,
+    SellerModule,
+    CategoryModule,
+    ThemeModule,
   ],
   providers: [
     {

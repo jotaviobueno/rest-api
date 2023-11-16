@@ -13,14 +13,29 @@ import {
 
 export class CreateProductDto {
   @IsString()
-  @Length(1, 255)
   @IsNotEmpty()
+  @Length(3, 255)
   name: string;
 
   @IsString()
-  @Length(1, 1020)
+  @IsNotEmpty()
+  @Length(3, 1500)
+  description: string;
+
+  @IsMongoId({ each: true })
   @IsOptional()
-  description?: string;
+  @ArrayMaxSize(5)
+  themeIds?: string[];
+
+  @IsMongoId({ each: true })
+  @IsOptional()
+  @ArrayMaxSize(5)
+  categoriesIds?: string[];
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(3, 255)
+  type: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -28,12 +43,13 @@ export class CreateProductDto {
   price: number;
 
   @IsInt()
-  @IsOptional()
-  stock?: number;
+  @Min(1)
+  @IsNotEmpty()
+  stock: number;
 
   @IsArray()
-  @ArrayMaxSize(3)
   @IsOptional()
+  @ArrayMaxSize(5)
   imagesUrls?: string[];
 
   @IsMongoId()

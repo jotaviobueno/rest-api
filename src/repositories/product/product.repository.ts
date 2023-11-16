@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from 'src/domain/dtos';
+import { CreateProductDto, UpdateProductDto } from 'src/domain/dtos';
 import { ProductEntity } from 'src/domain/entities';
 import { RepositoryFactory } from 'src/domain/factories';
 
 @Injectable()
 export class ProductRepository extends RepositoryFactory<
   ProductEntity,
-  CreateProductDto
+  CreateProductDto,
+  UpdateProductDto
 > {
   constructor() {
     super('product');
   }
 
-  findById(id: string): Promise<ProductEntity> {
+  findById(id: string) {
     return this.prismaService.product.findFirst({
       where: {
         id,

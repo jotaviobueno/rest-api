@@ -8,18 +8,28 @@ import { ProductEntity } from 'src/domain/entities';
 import { QueryBuilder, isMongoId } from 'src/domain/utils';
 import { QueryParamsDto } from 'src/domain/dtos';
 import { ServiceBase } from 'src/domain/base';
+import { ThemeService } from '../theme/theme.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ProductService
-  implements Partial<ServiceBase<CreateProductDto, ProductEntity>>
+  implements
+    Partial<ServiceBase<ProductEntity, CreateProductDto, UpdateProductDto>>
 {
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly commerceService: CommerceService,
+    private readonly themeService: ThemeService,
+    private readonly categoryService: CategoryService,
   ) {}
 
   async create(data: CreateProductDto): Promise<ProductEntity> {
     const commerce = await this.commerceService.findOne(data.commerceId);
+
+    if (data.themeIds) await this.themeService.findManyWithIds(data.themeIds);
+
+    if (data.categoriesIds)
+      await this.categoryService.findManyWithIds(data.categoriesIds);
 
     const product = await this.productRepository.create({
       ...data,

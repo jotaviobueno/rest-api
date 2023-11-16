@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
 
-export class RepositoryFactory<K, T = void> {
+export class RepositoryFactory<K, T = void, J = void> {
   @Inject(PrismaService)
   public readonly prismaService: PrismaService;
 
@@ -54,7 +54,7 @@ export class RepositoryFactory<K, T = void> {
     });
   }
 
-  update({ id, ...dto }: Partial<T> & { id?: string }): Promise<K> {
+  update({ id, ...dto }: J & { id?: string }): Promise<K> {
     return this.prismaService[this.model].update({
       where: {
         id,

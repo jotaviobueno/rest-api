@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import {
@@ -15,6 +16,9 @@ import {
   UpdatePersonDto,
 } from 'src/domain/dtos';
 import { IsPublic } from '../access/decorators';
+import { RoleGuard } from '../role/guards';
+import { Roles } from '../role/decorators';
+import { ROLE_ENUM } from 'src/domain/enum/role';
 
 @Controller('person')
 export class PersonController {
@@ -26,23 +30,30 @@ export class PersonController {
     return this.personService.create(createPersonDto);
   }
 
-  @IsPublic()
   @Get()
+  @UseGuards(RoleGuard)
+  @Roles(ROLE_ENUM.CUSTOMER)
   findAll(@Query() queryParamsDto: QueryParamsDto) {
     return this.personService.findAll(queryParamsDto);
   }
 
   @Get(':id')
+  @UseGuards(RoleGuard)
+  @Roles(ROLE_ENUM.CUSTOMER)
   findOne(@Param('id') id: string) {
     return this.personService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(RoleGuard)
+  @Roles(ROLE_ENUM.CUSTOMER)
   update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
     return this.personService.update({ ...updatePersonDto, id });
   }
 
   @Delete(':id')
+  @UseGuards(RoleGuard)
+  @Roles(ROLE_ENUM.CUSTOMER)
   remove(@Param('id') id: string) {
     return this.personService.remove(id);
   }

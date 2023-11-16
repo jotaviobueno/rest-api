@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCommerceDto } from 'src/domain/dtos';
+import { CreateCommerceDto, UpdateCommerceDto } from 'src/domain/dtos';
 import { CommerceEntity } from 'src/domain/entities';
 import { RepositoryFactory } from 'src/domain/factories';
 
 @Injectable()
 export class CommerceRepository extends RepositoryFactory<
   CommerceEntity,
-  CreateCommerceDto
+  CreateCommerceDto,
+  UpdateCommerceDto
 > {
   constructor() {
     super('commerce');

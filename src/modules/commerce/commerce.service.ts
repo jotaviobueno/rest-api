@@ -12,7 +12,8 @@ import { CommerceRepository } from 'src/repositories/commerce';
 
 @Injectable()
 export class CommerceService
-  implements Partial<ServiceBase<CreateCommerceDto, CommerceEntity>>
+  implements
+    Partial<ServiceBase<CreateCommerceDto, CommerceEntity, UpdateCommerceDto>>
 {
   constructor(private readonly commerceRepository: CommerceRepository) {}
 

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePersonDto } from 'src/domain/dtos';
+import { CreatePersonDto, UpdatePersonDto } from 'src/domain/dtos';
 import { PersonEntity } from 'src/domain/entities';
 import { RepositoryFactory } from 'src/domain/factories';
 
 @Injectable()
 export class PersonRepository extends RepositoryFactory<
   PersonEntity,
-  CreatePersonDto
+  CreatePersonDto,
+  UpdatePersonDto
 > {
   constructor() {
     super('person');
@@ -14,10 +15,7 @@ export class PersonRepository extends RepositoryFactory<
 
   create(data: CreatePersonDto): Promise<PersonEntity> {
     return this.prismaService.person.create({
-      data: {
-        ...data,
-        deletedAt: null,
-      },
+      data,
     });
   }
 
