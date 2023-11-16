@@ -164,6 +164,8 @@ model Customer {
   @@map("customer")
 }
 
+//  SUPPLIER PRODUCT NISSO DEFINA O STOCK
+
 model Supplier {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   name       String
@@ -203,7 +205,8 @@ model Address {
   sellerId             String?            @map("seller_id") @db.ObjectId
   distributionCenter   DistributionCenter @relation(fields: [distributionCenterId], references: [id])
   distributionCenterId String             @map("distribution_center_id") @db.ObjectId
-  Carrier              Carrier[]
+  carrier              Carrier            @relation(fields: [carrierId], references: [id])
+  carrierId            String             @map("carrier_id") @db.ObjectId
 
   @@map("address")
 }
@@ -228,9 +231,8 @@ model Carrier {
   phone     String?
   cpf       String
   cnpj      String?
-  address   Address   @relation(fields: [addressId], references: [id])
-  addressId String    @map("address_id") @db.ObjectId
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
+  Address   Address[]
 }
