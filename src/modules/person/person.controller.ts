@@ -32,14 +32,14 @@ export class PersonController {
 
   @Get()
   @UseGuards(RoleGuard)
-  @Roles(ROLE_ENUM.CUSTOMER)
+  @Roles(ROLE_ENUM.ADMIN, ROLE_ENUM.FINANCE)
   findAll(@Query() queryParamsDto: QueryParamsDto) {
     return this.personService.findAll(queryParamsDto);
   }
 
   @Get(':id')
   @UseGuards(RoleGuard)
-  @Roles(ROLE_ENUM.CUSTOMER)
+  @Roles(ROLE_ENUM.ADMIN, ROLE_ENUM.FINANCE)
   findOne(@Param('id') id: string) {
     return this.personService.findOne(id);
   }

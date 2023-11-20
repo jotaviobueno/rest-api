@@ -22,8 +22,6 @@ export class CustomerService
   ) {}
 
   async create(dto: CreateCustomerDto): Promise<CustomerEntity> {
-    const commerce = await this.commerceService.findOne(dto.commerceId);
-
     const emailAlreadyExist = await this.customerRepository.forceFindByEmail(
       dto.email,
     );
@@ -37,10 +35,7 @@ export class CustomerService
     if (usernameAlreadyExist)
       throw new HttpException('Username already exist', HttpStatus.BAD_REQUEST);
 
-    const customer = await this.customerRepository.create({
-      ...dto,
-      commerceId: commerce.id,
-    });
+    const customer = await this.customerRepository.create(dto);
 
     return customer;
   }
@@ -73,8 +68,6 @@ export class CustomerService
 
   async update(dto: UpdateCustomerDto): Promise<CustomerEntity> {
     const customer = await this.findOne(dto.id);
-
-    if (dto.commerceId) await this.commerceService.findOne(dto.commerceId);
 
     if (dto.email) {
       const emailAlreadyExist = await this.customerRepository.forceFindByEmail(

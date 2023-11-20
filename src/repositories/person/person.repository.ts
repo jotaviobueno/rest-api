@@ -13,12 +13,6 @@ export class PersonRepository extends RepositoryFactory<
     super('person');
   }
 
-  create(data: CreatePersonDto): Promise<PersonEntity> {
-    return this.prismaService.person.create({
-      data,
-    });
-  }
-
   findById(id: string): Promise<PersonEntity> {
     return this.prismaService.person.findFirst({
       where: {

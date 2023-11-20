@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import {
@@ -14,8 +15,13 @@ import {
   QueryParamsDto,
   UpdateCustomerDto,
 } from 'src/domain/dtos';
+import { RoleGuard } from '../role/guards';
+import { Roles } from '../role/decorators';
+import { ROLE_ENUM } from 'src/domain/enum/role';
 
 @Controller('customer')
+@UseGuards(RoleGuard)
+@Roles(ROLE_ENUM.CUSTOMER)
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 

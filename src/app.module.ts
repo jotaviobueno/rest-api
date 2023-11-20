@@ -12,6 +12,7 @@ import { SellerModule } from './modules/seller/seller.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ThemeModule } from './modules/theme/theme.module';
 import { CustomerModule } from './modules/customer/customer.module';
+import { CommerceCustomerModule } from './modules/commerce-customer/commerce-customer.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CustomerModule } from './modules/customer/customer.module';
     CategoryModule,
     ThemeModule,
     CustomerModule,
+    CommerceCustomerModule,
   ],
   providers: [
     {

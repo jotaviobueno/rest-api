@@ -7,3 +7,4 @@ export * from './seller';
 export * from './theme';
 export * from './category';
 export * from './customer';
+export * from './commerce-customer';

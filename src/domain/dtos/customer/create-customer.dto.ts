@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsMongoId,
-  IsNotEmpty,
-  IsString,
-  IsUrl,
-  Length,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
 
 export class CreateCustomerDto {
   @IsString()
@@ -17,10 +10,6 @@ export class CreateCustomerDto {
   @IsNotEmpty()
   @Length(3, 255)
   lastName: string;
-
-  @IsMongoId()
-  @IsNotEmpty()
-  commerceId: string;
 
   @IsString()
   @IsNotEmpty()

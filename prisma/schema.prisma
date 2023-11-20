@@ -39,7 +39,7 @@ model PersonRole {
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
 
-  @@map("person-role")
+  @@map("person_role")
 }
 
 model Role {
@@ -55,20 +55,20 @@ model Role {
 }
 
 model Commerce {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  name         String     @unique
-  descriptions String[]   @default([])
-  imagesUrls   String[]   @default([])
-  person       Person     @relation(fields: [personId], references: [id])
-  personId     String     @map("person_id") @db.ObjectId
-  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp
-  updatedAt    DateTime   @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt    DateTime?  @map("deleted_at") @db.Timestamp
-  product      Product[]
-  seller       Seller[]
-  customer     Customer[]
-  Supplier     Supplier[]
-  Address      Address[]
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  name             String             @unique
+  descriptions     String[]           @default([])
+  imagesUrls       String[]           @default([])
+  person           Person             @relation(fields: [personId], references: [id])
+  personId         String             @map("person_id") @db.ObjectId
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamp
+  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt        DateTime?          @map("deleted_at") @db.Timestamp
+  product          Product[]
+  seller           Seller[]
+  Supplier         Supplier[]
+  Address          Address[]
+  CommerceCustomer CommerceCustomer[]
 
   @@map("commerce")
 }
@@ -147,24 +147,34 @@ model Category {
   @@map("category")
 }
 
-model Customer {
+model CommerceCustomer {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName  String    @map("first_name")
-  lastName   String    @map("last_name")
-  username   String
-  email      String
-  avatarUrl  String    @map("avatar_url")
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  customerId String    @map("customer_id") @db.ObjectId
+  commerce   Commerce  @relation(fields: [commerceId], references: [id])
+  commerceId String    @map("commerce_id") @db.ObjectId
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp
   updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp
-  commerce   Commerce  @relation(fields: [commerceId], references: [id])
-  commerceId String    @map("commerce_id") @db.ObjectId
-  Address    Address[]
+
+  @@map("commerce_customer")
+}
+
+model Customer {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  firstName        String             @map("first_name")
+  lastName         String             @map("last_name")
+  username         String
+  email            String
+  avatarUrl        String             @map("avatar_url")
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamp
+  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt        DateTime?          @map("deleted_at") @db.Timestamp
+  Address          Address[]
+  CommerceCustomer CommerceCustomer[]
 
   @@map("customer")
 }
-
-//  SUPPLIER PRODUCT NISSO DEFINA O STOCK
 
 model Supplier {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -235,4 +245,6 @@ model Carrier {
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
   Address   Address[]
+
+  @@map("carrier")
 }

@@ -4,7 +4,6 @@ export class CustomerEntity implements Customer {
   id: string;
   firstName: string;
   lastName: string;
-  commerceId: string;
   username: string;
   email: string;
   avatarUrl: string;
