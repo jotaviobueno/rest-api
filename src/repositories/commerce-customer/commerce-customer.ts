@@ -22,6 +22,7 @@ export class CommerceCustomerRepository extends RepositoryFactory<
     return this.prismaService.commerceCustomer.findFirst({
       where: {
         ...dto,
+        deletedAt: null,
       },
     });
   }

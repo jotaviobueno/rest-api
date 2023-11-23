@@ -8,3 +8,8 @@ export * from './theme';
 export * from './category';
 export * from './customer';
 export * from './commerce-customer';
+export * from './supplier';
+export * from './product-supplier';
+export * from './product-category';
+export * from './product-collection';
+export * from './product-theme';

@@ -12,7 +12,7 @@ import { ThemeRepository } from 'src/repositories/theme';
 
 @Injectable()
 export class ThemeService
-  implements ServiceBase<ThemeEntity, CreateThemeDto, UpdateThemeDto>
+  implements Partial<ServiceBase<ThemeEntity, CreateThemeDto, UpdateThemeDto>>
 {
   constructor(private readonly themeRepository: ThemeRepository) {}
 
@@ -43,7 +43,17 @@ export class ThemeService
   }
 
   async findManyWithIds(ids: string[]): Promise<ThemeEntity[]> {
-    const themes = await this.themeRepository.findManyWithIds(ids);
+    const themesIds = ids.map((id) => {
+      if (!isMongoId(id))
+        throw new HttpException(
+          'Id sent its not mongo id',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      return id;
+    });
+
+    const themes = await this.themeRepository.findManyWithIds(themesIds);
 
     themes.forEach((theme) => {
       if (!theme)

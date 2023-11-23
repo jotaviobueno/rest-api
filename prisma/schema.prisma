@@ -17,7 +17,7 @@ model Person {
   username   String
   email      String
   password   String
-  avatarUrl  String       @map("avatar_url")
+  avatarUrl  String?      @map("avatar_url")
   createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamp
   updatedAt  DateTime     @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime?    @map("deleted_at") @db.Timestamp
@@ -64,9 +64,9 @@ model Commerce {
   createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamp
   updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamp
   deletedAt        DateTime?          @map("deleted_at") @db.Timestamp
+  isActive         Boolean            @default(true) @map("is_active")
   product          Product[]
   seller           Seller[]
-  Supplier         Supplier[]
   Address          Address[]
   CommerceCustomer CommerceCustomer[]
 
@@ -81,6 +81,7 @@ model Seller {
   commerce   Commerce  @relation(fields: [commerceId], references: [id])
   commerceId String    @map("commerce_id") @db.ObjectId
   avatarUrl  String    @map("avatar_url")
+  isActive   Boolean   @default(true) @map("is_active")
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp
   updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp
@@ -90,24 +91,66 @@ model Seller {
 }
 
 model Product {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  description   String[]  @default([])
-  theme         Theme     @relation(fields: [themesIds], references: [id])
-  themesIds     String[]  @default([]) @map("theme_id") @db.ObjectId
-  category      Category  @relation(fields: [categoriesIds], references: [id])
-  categoriesIds String[]  @default([]) @map("categories_ids") @db.ObjectId
-  type          String
-  price         Float
-  stock         Int?
-  imagesUrls    String[]  @default([])
-  commerce      Commerce  @relation(fields: [commerceId], references: [id])
-  commerceId    String    @map("commerce_id") @db.ObjectId
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp
-  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt     DateTime? @map("deleted_at") @db.Timestamp
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  descriptions      String[]            @default([])
+  isActive          Boolean             @default(true) @map("is_active")
+  type              String
+  price             Float
+  stock             Int?
+  imagesUrls        String[]            @default([])
+  commerce          Commerce            @relation(fields: [commerceId], references: [id])
+  commerceId        String              @map("commerce_id") @db.ObjectId
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamp
+  updatedAt         DateTime            @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt         DateTime?           @map("deleted_at") @db.Timestamp
+  ProductSupplier   ProductSupplier[]
+  ProductCollection ProductCollection[]
+  ProductCategory   ProductCategory[]
+  ProductTheme      ProductTheme[]
 
   @@map("product")
+}
+
+model ProductCollection {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  product      Product    @relation(fields: [productId], references: [id])
+  productId    String     @map("product_id") @db.ObjectId
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String     @map("collection_id") @db.ObjectId
+
+  @@map("product_collection")
+}
+
+model ProductCategory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String   @map("product_id") @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @map("category_id") @db.ObjectId
+
+  @@map("product_category")
+}
+
+model ProductTheme {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id") @db.ObjectId
+  theme     Theme   @relation(fields: [themeId], references: [id])
+  themeId   String  @map("theme_id") @db.ObjectId
+
+  @@map("product_theme")
+}
+
+model Collection {
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  name              String              @unique
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamp
+  updatedAt         DateTime            @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt         DateTime?           @map("deleted_at") @db.Timestamp
+  ProductCollection ProductCollection[]
+
+  @@map("collection")
 }
 
 model Stock {
@@ -125,24 +168,24 @@ model Stock {
 }
 
 model Theme {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String    @unique
-  description String?
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp
-  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt   DateTime? @map("deleted_at") @db.Timestamp
-  Product     Product[]
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  name         String         @unique
+  description  String?
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp
+  updatedAt    DateTime       @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamp
+  ProductTheme ProductTheme[]
 
   @@map("theme")
 }
 
 model Category {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String    @unique
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
-  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt DateTime? @map("deleted_at") @db.Timestamp
-  product   Product[]
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  name            String            @unique
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
+  ProductCategory ProductCategory[]
 
   @@map("category")
 }
@@ -176,47 +219,59 @@ model Customer {
   @@map("customer")
 }
 
-model Supplier {
+model ProductSupplier {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  phone      String?
-  email      String
-  cnpj       String
+  product    Product   @relation(fields: [productId], references: [id])
+  productId  String    @map("product_id") @db.ObjectId
+  supplierId String    @map("supplier_id") @db.ObjectId
+  supplier   Supplier  @relation(fields: [supplierId], references: [id])
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp
   updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp
-  commerce   Commerce  @relation(fields: [commerceId], references: [id])
-  commerceId String    @map("commerce_id") @db.ObjectId
-  Address    Address[]
+
+  @@map("product_supplier")
+}
+
+model Supplier {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  phone           String?
+  email           String
+  cnpj            String            @unique
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
+  Address         Address[]
+  ProductSupplier ProductSupplier[]
 
   @@map("supplier")
 }
 
 model Address {
-  id                   String             @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
   street               String
   number               String
   neighborhood         String
   city                 String
-  zipCode              Int                @map("zip_code")
+  zipCode              Int                 @map("zip_code")
   state                String
-  createdAt            DateTime           @default(now()) @map("created_at") @db.Timestamp
-  updatedAt            DateTime           @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt            DateTime?          @map("deleted_at") @db.Timestamp
-  person               Person?            @relation(fields: [personId], references: [id])
-  personId             String?            @map("person_id") @db.ObjectId
-  customer             Customer?          @relation(fields: [customerId], references: [id])
-  customerId           String?            @map("customer_id") @db.ObjectId
-  supplier             Supplier?          @relation(fields: [supplierId], references: [id])
-  supplierId           String?            @map("supplier_id") @db.ObjectId
-  commerce             Commerce?          @relation(fields: [commerceId], references: [id])
-  commerceId           String?            @map("commerce_id") @db.ObjectId
-  seller               Seller?            @relation(fields: [sellerId], references: [id])
-  sellerId             String?            @map("seller_id") @db.ObjectId
-  distributionCenter   DistributionCenter @relation(fields: [distributionCenterId], references: [id])
-  distributionCenterId String             @map("distribution_center_id") @db.ObjectId
-  carrier              Carrier            @relation(fields: [carrierId], references: [id])
-  carrierId            String             @map("carrier_id") @db.ObjectId
+  createdAt            DateTime            @default(now()) @map("created_at") @db.Timestamp
+  updatedAt            DateTime            @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt            DateTime?           @map("deleted_at") @db.Timestamp
+  person               Person?             @relation(fields: [personId], references: [id])
+  personId             String?             @map("person_id") @db.ObjectId
+  customer             Customer?           @relation(fields: [customerId], references: [id])
+  customerId           String?             @map("customer_id") @db.ObjectId
+  supplier             Supplier?           @relation(fields: [supplierId], references: [id])
+  supplierId           String?             @map("supplier_id") @db.ObjectId
+  commerce             Commerce?           @relation(fields: [commerceId], references: [id])
+  commerceId           String?             @map("commerce_id") @db.ObjectId
+  seller               Seller?             @relation(fields: [sellerId], references: [id])
+  sellerId             String?             @map("seller_id") @db.ObjectId
+  distributionCenter   DistributionCenter? @relation(fields: [distributionCenterId], references: [id])
+  distributionCenterId String?             @map("distribution_center_id") @db.ObjectId
+  carrier              Carrier?            @relation(fields: [carrierId], references: [id])
+  carrierId            String?             @map("carrier_id") @db.ObjectId
 
   @@map("address")
 }

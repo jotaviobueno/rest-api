@@ -16,6 +16,12 @@ export class RepositoryFactory<K, T = void, J = void> {
     });
   }
 
+  createMany(dto: T[]) {
+    return this.prismaService[this.model].createMany({
+      data: dto,
+    });
+  }
+
   forceFindById(id: string): Promise<K> {
     return this.prismaService[this.model].findFirst({
       where: {

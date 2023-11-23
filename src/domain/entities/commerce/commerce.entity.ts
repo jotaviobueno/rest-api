@@ -9,4 +9,5 @@ export class CommerceEntity implements Commerce {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
+  isActive: boolean;
 }

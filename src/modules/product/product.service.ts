@@ -8,8 +8,12 @@ import { ProductEntity } from 'src/domain/entities';
 import { QueryBuilder, isMongoId } from 'src/domain/utils';
 import { QueryParamsDto } from 'src/domain/dtos';
 import { ServiceBase } from 'src/domain/base';
-import { ThemeService } from '../theme/theme.service';
 import { CategoryService } from '../category/category.service';
+import { CollectionService } from '../collection/collection.service';
+import { ThemeService } from '../theme/theme.service';
+import { ProductCategoryService } from '../product-category/product-category.service';
+import { ProductCollectionService } from '../product-collection/product-collection.service';
+import { ProductThemeService } from '../product-theme/product-theme.service';
 
 @Injectable()
 export class ProductService
@@ -19,22 +23,63 @@ export class ProductService
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly commerceService: CommerceService,
-    private readonly themeService: ThemeService,
     private readonly categoryService: CategoryService,
+    private readonly collectionService: CollectionService,
+    private readonly themeService: ThemeService,
+    private readonly productCategoryService: ProductCategoryService,
+    private readonly productCollectionService: ProductCollectionService,
+    private readonly productThemeService: ProductThemeService,
   ) {}
 
-  async create(data: CreateProductDto): Promise<ProductEntity> {
+  async create({
+    categoriesIds,
+    themesIds,
+    collectionsIds,
+    ...data
+  }: CreateProductDto): Promise<ProductEntity> {
     const commerce = await this.commerceService.findOne(data.commerceId);
 
-    if (data.themeIds) await this.themeService.findManyWithIds(data.themeIds);
+    if (categoriesIds)
+      await this.categoryService.findManyWithIds(categoriesIds);
 
-    if (data.categoriesIds)
-      await this.categoryService.findManyWithIds(data.categoriesIds);
+    if (collectionsIds)
+      await this.collectionService.findManyWithIds(collectionsIds);
+
+    if (themesIds) await this.themeService.findManyWithIds(themesIds);
 
     const product = await this.productRepository.create({
       ...data,
       commerceId: commerce.id,
     });
+
+    if (categoriesIds) {
+      const createProductCategoryDto = categoriesIds.map((categoryId) => ({
+        categoryId,
+        productId: product.id,
+      }));
+
+      await this.productCategoryService.createMany(createProductCategoryDto);
+    }
+
+    if (collectionsIds) {
+      const createProductCollectionDto = collectionsIds.map((collectionId) => ({
+        collectionId,
+        productId: product.id,
+      }));
+
+      await this.productCollectionService.createMany(
+        createProductCollectionDto,
+      );
+    }
+
+    if (themesIds) {
+      const createProductThemeDto = themesIds.map((themeId) => ({
+        themeId,
+        productId: product.id,
+      }));
+
+      await this.productThemeService.createMany(createProductThemeDto);
+    }
 
     return product;
   }
@@ -67,6 +112,14 @@ export class ProductService
 
   async update(data: UpdateProductDto): Promise<ProductEntity> {
     const product = await this.findOne(data.id);
+
+    if (data.categoriesIds)
+      await this.categoryService.findManyWithIds(data.categoriesIds);
+
+    if (data.collectionsIds)
+      await this.collectionService.findManyWithIds(data.collectionsIds);
+
+    if (data.themesIds) await this.themeService.findManyWithIds(data.themesIds);
 
     const update = await this.productRepository.update({
       ...data,

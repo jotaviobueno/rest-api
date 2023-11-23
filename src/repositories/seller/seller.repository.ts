@@ -17,6 +17,8 @@ export class SellerRepository extends RepositoryFactory<
     return this.prismaService.seller.findFirst({
       where: {
         id,
+        isActive: true,
+        deletedAt: null,
       },
       include: {
         commerce: {

@@ -7,7 +7,7 @@ export class PersonEntity implements Person {
   username: string;
   email: string;
   password: string;
-  avatarUrl: string;
+  avatarUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;

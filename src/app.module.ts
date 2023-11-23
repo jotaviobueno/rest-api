@@ -13,6 +13,12 @@ import { CategoryModule } from './modules/category/category.module';
 import { ThemeModule } from './modules/theme/theme.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { CommerceCustomerModule } from './modules/commerce-customer/commerce-customer.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
+import { ProductSupplierModule } from './modules/product-supplier/product-supplier.module';
+import { CollectionModule } from './modules/collection/collection.module';
+import { ProductCategoryModule } from './modules/product-category/product-category.module';
+import { ProductCollectionModule } from './modules/product-collection/product-collection.module';
+import { ProductThemeModule } from './modules/product-theme/product-theme.module';
 
 @Module({
   imports: [
@@ -28,6 +34,12 @@ import { CommerceCustomerModule } from './modules/commerce-customer/commerce-cus
     ThemeModule,
     CustomerModule,
     CommerceCustomerModule,
+    SupplierModule,
+    ProductSupplierModule,
+    CollectionModule,
+    ProductCategoryModule,
+    ProductCollectionModule,
+    ProductThemeModule,
   ],
   providers: [
     {

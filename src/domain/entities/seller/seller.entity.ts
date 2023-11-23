@@ -7,6 +7,7 @@ export class SelllerEntity implements Seller {
   email: string;
   commerceId: string;
   avatarUrl: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;

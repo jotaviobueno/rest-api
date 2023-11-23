@@ -3,9 +3,8 @@ import { Product } from '@prisma/client';
 export class ProductEntity implements Product {
   id: string;
   name: string;
-  description: string[];
-  themesIds: string[];
-  categoriesIds: string[];
+  descriptions: string[];
+  isActive: boolean;
   type: string;
   price: number;
   stock: number | null;

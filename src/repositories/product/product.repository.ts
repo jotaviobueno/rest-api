@@ -6,8 +6,8 @@ import { RepositoryFactory } from 'src/domain/factories';
 @Injectable()
 export class ProductRepository extends RepositoryFactory<
   ProductEntity,
-  CreateProductDto,
-  UpdateProductDto
+  Omit<CreateProductDto, 'themesIds' | 'categoriesIds' | 'collectionsIds'>,
+  Omit<UpdateProductDto, 'themesIds' | 'categoriesIds' | 'collectionsIds'>
 > {
   constructor() {
     super('product');
@@ -24,7 +24,39 @@ export class ProductRepository extends RepositoryFactory<
           select: {
             id: true,
             name: true,
-            imagesUrls: true,
+          },
+        },
+        ProductCategory: {
+          select: {
+            id: true,
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        ProductCollection: {
+          select: {
+            id: true,
+            collection: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        ProductTheme: {
+          select: {
+            id: true,
+            theme: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -36,13 +68,46 @@ export class ProductRepository extends RepositoryFactory<
       ...query,
       where: {
         deletedAt: null,
+        isActive: true,
       },
       include: {
         commerce: {
           select: {
-            name: true,
-            imagesUrls: true,
             id: true,
+            name: true,
+          },
+        },
+        ProductCategory: {
+          select: {
+            id: true,
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        ProductCollection: {
+          select: {
+            id: true,
+            collection: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        ProductTheme: {
+          select: {
+            id: true,
+            theme: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },

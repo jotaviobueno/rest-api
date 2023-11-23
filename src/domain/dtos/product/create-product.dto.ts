@@ -17,20 +17,26 @@ export class CreateProductDto {
   @Length(3, 255)
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @Length(3, 1500)
-  description: string;
+  @IsArray()
+  @IsString({ each: true })
+  @Length(3, 1500, { each: true })
+  @ArrayMaxSize(5)
+  descriptions: string[];
 
   @IsMongoId({ each: true })
   @IsOptional()
   @ArrayMaxSize(5)
-  themeIds?: string[];
+  themesIds?: string[];
 
   @IsMongoId({ each: true })
   @IsOptional()
   @ArrayMaxSize(5)
   categoriesIds?: string[];
+
+  @IsMongoId({ each: true })
+  @IsOptional()
+  @ArrayMaxSize(5)
+  collectionsIds?: string[];
 
   @IsString()
   @IsNotEmpty()

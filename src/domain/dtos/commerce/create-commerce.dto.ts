@@ -1,6 +1,7 @@
 import {
   ArrayMaxSize,
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -25,4 +26,8 @@ export class CreateCommerceDto {
   imagesUrls: string[];
 
   personId: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive: boolean;
 }

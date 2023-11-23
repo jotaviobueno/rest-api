@@ -12,7 +12,8 @@ import { CategoryRepository } from 'src/repositories/category';
 
 @Injectable()
 export class CategoryService
-  implements ServiceBase<CategoryEntity, CreateCategoryDto, UpdateCategoryDto>
+  implements
+    Partial<ServiceBase<CategoryEntity, CreateCategoryDto, UpdateCategoryDto>>
 {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
@@ -68,7 +69,18 @@ export class CategoryService
   }
 
   async findManyWithIds(ids: string[]): Promise<CategoryEntity[]> {
-    const categories = await this.categoryRepository.findManyWithIds(ids);
+    const categoriesIds = ids.map((id) => {
+      if (!isMongoId(id))
+        throw new HttpException(
+          'Id sent its not mongo id',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      return id;
+    });
+
+    const categories =
+      await this.categoryRepository.findManyWithIds(categoriesIds);
 
     categories.forEach((category) => {
       if (!category)

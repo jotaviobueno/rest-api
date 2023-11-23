@@ -1,7 +1,9 @@
 import {
+  IsBoolean,
   IsEmail,
   IsMongoId,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsUrl,
   Length,
@@ -29,4 +31,8 @@ export class CreateSellerDto {
   @IsUrl()
   @IsNotEmpty()
   avatarUrl: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive: boolean;
 }
