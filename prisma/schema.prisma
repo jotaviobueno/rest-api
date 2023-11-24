@@ -303,3 +303,16 @@ model Carrier {
 
   @@map("carrier")
 }
+
+model Log {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  collection String   @db.String
+  action     String
+  query      Json?
+  oldValue   Json?    @map("old_value")
+  newValue   Json?    @map("new_value")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamp
+
+  @@map("log")
+}
